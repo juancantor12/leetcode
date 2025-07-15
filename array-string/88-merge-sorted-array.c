@@ -1,3 +1,4 @@
+// For details on the problem, examples and comments on the solution please refer to the python script on this same folder.
 void merge(int* nums1, int nums1Size, int m, int* nums2, int nums2Size, int n) {
     int p = m + n - 1;
     m -= 1;
