@@ -26,3 +26,9 @@ group by start.machine_id
 
 -- 577
 select e.name, b.bonus from Employee e left join Bonus b on e.empId = b.empId where b.bonus < 1000 or b.bonus is null
+
+-- 1280
+select st.student_id, st.student_name, su.subject_name, count(ex.student_id) as attended_exams
+from Students st join Subjects su left join Examinations ex on ex.student_id = st.student_id and su.subject_name = ex.subject_name
+group by st.student_id, st.student_name, su.subject_name
+order by st.student_id asc, su.subject_name asc
