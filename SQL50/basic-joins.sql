@@ -32,3 +32,8 @@ select st.student_id, st.student_name, su.subject_name, count(ex.student_id) as 
 from Students st join Subjects su left join Examinations ex on ex.student_id = st.student_id and su.subject_name = ex.subject_name
 group by st.student_id, st.student_name, su.subject_name
 order by st.student_id asc, su.subject_name asc
+
+--570
+select e2.name from Employee e inner join Employee e2 on e.managerId = e2.id
+group by e2.id, e2.name
+having count(e2.id) >= 5
