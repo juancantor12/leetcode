@@ -37,3 +37,11 @@ order by st.student_id asc, su.subject_name asc
 select e2.name from Employee e inner join Employee e2 on e.managerId = e2.id
 group by e2.id, e2.name
 having count(e2.id) >= 5
+
+--1934
+select b.user_id, IFNULL(ROUND(a.confirmed/b.total, 2), 0) as confirmation_rate
+from (
+    select s.user_id, count(c.action) as confirmed from Signups s left join Confirmations c on s.user_id = c.user_id where c.action = "confirmed" group by s.user_id
+) a right join (
+    select s.user_id, count(c.action) as total from Signups s left join Confirmations c on s.user_id = c.user_id group by s.user_id
+) b on a.user_id = b.user_id
