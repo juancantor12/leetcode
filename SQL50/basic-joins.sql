@@ -45,3 +45,9 @@ from (
 ) a right join (
     select s.user_id, count(c.action) as total from Signups s left join Confirmations c on s.user_id = c.user_id group by s.user_id
 ) b on a.user_id = b.user_id
+
+
+--1075
+select p.project_id, ifnull(round(avg(e.experience_years), 2), 0) as average_years 
+from Project p left join Employee e on p.employee_id = e.employee_id
+group by p.project_id
