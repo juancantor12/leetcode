@@ -20,3 +20,14 @@ select
     round(sum(q.rating < 3)/count(q.rating)*100, 2) as poor_query_percentage 
 from Queries q
 group by q.query_name
+
+--1193
+select 
+    DATE_FORMAT(trans_date,'%Y-%m') as month,
+    country,
+    count(id) as trans_count,
+    sum(state = "approved") as approved_count,
+    sum(amount) as trans_total_amount,
+    sum( IF(state = "approved", amount, 0) ) as approved_total_amount
+from Transactions
+Group by month, country
