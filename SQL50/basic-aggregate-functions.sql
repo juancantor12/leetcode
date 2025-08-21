@@ -31,3 +31,12 @@ select
     sum( IF(state = "approved", amount, 0) ) as approved_total_amount
 from Transactions
 Group by month, country
+
+--1174
+select round(avg(order_date = customer_pref_delivery_date)*100, 2) as immediate_percentage
+from Delivery
+where (customer_id, order_date) in (
+    SELECT customer_id, min(order_date)
+    from Delivery
+    group by customer_id
+)
