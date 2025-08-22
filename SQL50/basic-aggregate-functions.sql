@@ -40,3 +40,10 @@ where (customer_id, order_date) in (
     from Delivery
     group by customer_id
 )
+
+--550
+select round(count(f.player_id)/count(distinct a.player_id), 2) as fraction
+from Activity a 
+left join ( 
+    select player_id, min(event_date) as event_date from Activity group by player_id
+) f on a.player_id = f.player_id and date_add(f.event_date, interval 1 day) = a.event_date
