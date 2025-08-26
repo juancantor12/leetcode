@@ -21,3 +21,6 @@ WHERE(product_id,year) IN (
 
 --596
 select class from Courses group by class having count(student) >= 5
+
+--1729
+select f.user_id, count(f.follower_id) as followers_count from Followers f group by f.user_id order by f.user_id asc
