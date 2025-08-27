@@ -27,3 +27,8 @@ select f.user_id, count(f.follower_id) as followers_count from Followers f group
 
 --619
 select (select num from MyNumbers group by num having count(num) = 1 order by num desc limit 1) as num from dual
+
+--1045
+select customer_id from Customer 
+group by customer_id
+having count(distinct product_key) = (select count(distinct product_key) from Product)
