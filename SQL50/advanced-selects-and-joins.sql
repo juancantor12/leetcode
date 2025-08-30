@@ -3,3 +3,8 @@ select e.employee_id, e.name, count(e2.employee_id) as reports_count, round(avg(
 from Employees e inner join Employees e2 on e.employee_id = e2.reports_to
 group by e.employee_id, e.name
 order by e.employee_id
+
+--1789
+select employee_id, department_id from Employee where primary_flag = "Y"
+UNION
+select employee_id, department_id from Employee group by employee_id having count(department_id) = 1
