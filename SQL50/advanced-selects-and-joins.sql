@@ -11,3 +11,9 @@ select employee_id, department_id from Employee group by employee_id having coun
 
 --610
 SELECT x, y, z, IF( (x+y>z AND x+z > y AND y+z>x), "Yes", "No") as triangle from Triangle
+
+--180
+# Write your MySQL query statement below
+select distinct current.num as ConsecutiveNums 
+from Logs previous inner join Logs current on previous.id-1 = current.id inner join Logs next on current.id = next.id+1
+where current.num = previous.num and current.num = next.num
