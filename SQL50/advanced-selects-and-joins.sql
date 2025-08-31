@@ -8,3 +8,6 @@ order by e.employee_id
 select employee_id, department_id from Employee where primary_flag = "Y"
 UNION
 select employee_id, department_id from Employee group by employee_id having count(department_id) = 1
+
+--610
+SELECT x, y, z, IF( (x+y>z AND x+z > y AND y+z>x), "Yes", "No") as triangle from Triangle
