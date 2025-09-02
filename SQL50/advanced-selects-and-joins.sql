@@ -31,3 +31,10 @@ select distinct product_id, 10 as price from Products where product_id not in (
 select person_name from (
     select person_id, person_name, sum(weight) over (order by turn asc) as cumulative_weight from Queue
 ) xx where cumulative_weight <= 1000 order by cumulative_weight desc limit 1
+
+--1907
+select "Low Salary" as category, count(income) as accounts_count  from Accounts where income < 20000
+union
+select "Average Salary" as category, count(income) as accounts_count from Accounts where income >= 20000 and income <= 50000
+union
+select "High Salary" as category, count(income) as accounts_count  from Accounts where income > 50000
