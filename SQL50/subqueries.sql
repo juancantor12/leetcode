@@ -16,3 +16,13 @@ union all
         select mr.movie_id, m.title, avg(mr.rating) as avg_rating from MovieRating mr inner join Movies m on mr.movie_id = m.movie_id
         where mr.created_at between "2020-02-01" and "2020-02-28" group by mr.movie_id order by avg_rating desc, m.title asc limit 1
     ) as q2
+
+--1321
+SELECT DISTINCT
+    visited_on,
+    SUM(amount) OVER(ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,
+    ROUND(SUM(amount) OVER(ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) / 7, 2) AS average_amount
+FROM
+    Customer
+LIMIT 1000000
+OFFSET 6
