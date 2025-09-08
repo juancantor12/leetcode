@@ -26,3 +26,10 @@ FROM
     Customer
 LIMIT 1000000
 OFFSET 6
+
+--602
+select id, count(id) num  from (
+    select requester_id id from RequestAccepted
+    union all
+    select accepter_id id from RequestAccepted
+) as _ group by id order by num desc limit 1
