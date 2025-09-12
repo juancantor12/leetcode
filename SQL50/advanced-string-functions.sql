@@ -7,3 +7,6 @@ select u.user_id, concat(
 --1527
 select patient_id, patient_name, conditions from Patients 
 where conditions like "% DIAB1%" or conditions like "DIAB1%" or conditions like "% DIAB1%"
+
+--196
+DELETE from Person where id not in (select min_id from (select min(id) as min_id from Person group by email) as keep)
