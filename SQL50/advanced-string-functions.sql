@@ -10,3 +10,7 @@ where conditions like "% DIAB1%" or conditions like "DIAB1%" or conditions like 
 
 --196
 DELETE from Person where id not in (select min_id from (select min(id) as min_id from Person group by email) as keep)
+
+--1484
+select sell_date, count(distinct product) as num_sold, group_concat(distinct product order by product) as products
+from Activities group by sell_date
