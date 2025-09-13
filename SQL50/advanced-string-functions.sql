@@ -14,3 +14,6 @@ DELETE from Person where id not in (select min_id from (select min(id) as min_id
 --1484
 select sell_date, count(distinct product) as num_sold, group_concat(distinct product order by product) as products
 from Activities group by sell_date
+
+--1517
+SELECT * FROM Users WHERE mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]*@leetcode\\.com$' COLLATE utf8mb4_bin
