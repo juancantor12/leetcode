@@ -41,10 +41,44 @@ foodRatings.highestRated("japanese"); // return "ramen"
 class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
-        
+        self.foods = foods
+        self.cuisines = cuisines
+        self.ratings = ratings
+        self.food_map = {}
+        for i, food in enumerate(foods):
+            self.food_map[food] = i
+        self.max_rating_by_cuisine = {}
+        for i, rating in enumerate(ratings):
+            if cuisines[i] not in self.max_rating_by_cuisine:
+                self.max_rating_by_cuisine[cuisines[i]] = (rating, foods[i])
+            else:
+                r, f = self.max_rating_by_cuisine[cuisines[i]]
+                if ratings[i] > r:
+                    self.max_rating_by_cuisine[cuisines[i]] = (rating, foods[i])
+        print("foods: ", self.foods)
+        print("ratings: ", self.ratings)
+        print("cuisines: ", self.cuisines)
+        print("food_map: ", self.food_map)
+        print("max_rating_by_cuisine: ", self.max_rating_by_cuisine)
+
 
     def changeRating(self, food: str, newRating: int) -> None:
-        
+        #TODO: If the biggest rated food for x cuisine gets its rating reduced, the max_rating_by_cuisine needs to be recalculated.
+        i = self.food_map[food]
+        print("updating self.ratings for food=", food, " on i=", i, "from", self.ratings[i], " to ", newRating)
+        print("after: ", self.ratings)
+        self.ratings[i] = newRating
+        print("before: ", self.ratings)
+        # currentRating = self.highestRated(self.cuisines[i])
+        old_rating, old_food = self.max_rating_by_cuisine[self.cuisines[i]]
+        print(f"if ({newRating} > {old_rating}) or ({newRating} == {old_rating} and {food} < {old_food}):")
+        if (newRating > old_rating) or (newRating == old_rating and food < old_food):
+            print("updating max_rating_by_cuisine, before: ", self.max_rating_by_cuisine)
+            self.max_rating_by_cuisine[self.cuisines[i]] = (newRating, food)
+            print("after: ", self.max_rating_by_cuisine)
+
 
     def highestRated(self, cuisine: str) -> str:
-        
+        rating, food = self.max_rating_by_cuisine[cuisine]
+        return food
+
