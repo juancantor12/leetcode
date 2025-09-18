@@ -38,47 +38,34 @@ foodRatings.highestRated("japanese"); // return "ramen"
                                       // However, "ramen" is lexicographically smaller than "sushi".
 
 """
+# import heapq
+
 class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):
-        self.foods = foods
-        self.cuisines = cuisines
-        self.ratings = ratings
-        self.food_map = {}
-        for i, food in enumerate(foods):
-            self.food_map[food] = i
-        self.max_rating_by_cuisine = {}
-        for i, rating in enumerate(ratings):
-            if cuisines[i] not in self.max_rating_by_cuisine:
-                self.max_rating_by_cuisine[cuisines[i]] = (rating, foods[i])
-            else:
-                r, f = self.max_rating_by_cuisine[cuisines[i]]
-                if ratings[i] > r:
-                    self.max_rating_by_cuisine[cuisines[i]] = (rating, foods[i])
-        print("foods: ", self.foods)
-        print("ratings: ", self.ratings)
-        print("cuisines: ", self.cuisines)
-        print("food_map: ", self.food_map)
-        print("max_rating_by_cuisine: ", self.max_rating_by_cuisine)
+        self.food_info = {}  
+        self.cuisine_heaps = {}  
 
+        for food, cuisine, rating in zip(foods, cuisines, ratings):
+            self.food_info[food] = (cuisine, rating)
+            if cuisine not in self.cuisine_heaps:
+                self.cuisine_heaps[cuisine] = []
+            heapq.heappush(self.cuisine_heaps[cuisine], (-rating, food))
 
     def changeRating(self, food: str, newRating: int) -> None:
-        #TODO: If the biggest rated food for x cuisine gets its rating reduced, the max_rating_by_cuisine needs to be recalculated.
-        i = self.food_map[food]
-        print("updating self.ratings for food=", food, " on i=", i, "from", self.ratings[i], " to ", newRating)
-        print("after: ", self.ratings)
-        self.ratings[i] = newRating
-        print("before: ", self.ratings)
-        # currentRating = self.highestRated(self.cuisines[i])
-        old_rating, old_food = self.max_rating_by_cuisine[self.cuisines[i]]
-        print(f"if ({newRating} > {old_rating}) or ({newRating} == {old_rating} and {food} < {old_food}):")
-        if (newRating > old_rating) or (newRating == old_rating and food < old_food):
-            print("updating max_rating_by_cuisine, before: ", self.max_rating_by_cuisine)
-            self.max_rating_by_cuisine[self.cuisines[i]] = (newRating, food)
-            print("after: ", self.max_rating_by_cuisine)
-
+        cuisine, _ = self.food_info[food]
+        self.food_info[food] = (cuisine, newRating)
+        # Python heaps sort based on the tuple indexes, if there is a tie with the nth index, it will look for the
+        # next index, in this case, on a tie on ratings, it will sort based on the food str value lexicographically.
+        # the str class __gt__ (greather than >) and __lt__ (less than <) methods sort lexicographically by default
+        heapq.heappush(self.cuisine_heaps[cuisine], (-newRating, food))
 
     def highestRated(self, cuisine: str) -> str:
-        rating, food = self.max_rating_by_cuisine[cuisine]
-        return food
-
+        heap = self.cuisine_heaps[cuisine] # get the current cuisine heap
+        while heap: # traverse the heap
+            rating_neg, food = heap[0] # get the heap top element
+            if self.food_info[food][1] == -rating_neg: # if the rating on the heap top element matches the food info
+                return food # return the food name
+            heapq.heappop(heap)  # else, the heap value is outdated (this food ratin was lowered and the heap doesnt know)
+            # simply remove the item and keep iterating the heap.
+        return ""  
