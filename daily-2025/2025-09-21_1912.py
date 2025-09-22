@@ -41,19 +41,56 @@ movieRentingSystem.search(2);  // return [0, 1]. Movies of ID 2 are unrented at 
 class MovieRentingSystem:
 
     def __init__(self, n: int, entries: List[List[int]]):
-        
+        self.cheapest_shop = defaultdict(list)
+        self.movie_status = {}
+        self.report_list = []
+        self.report_list_set = set()
+        self.movie_prices = {}
+        for shop, movie, price in entries:
+            heapq.heappush(self.cheapest_shop[movie], (price, shop))
+            self.movie_status[(movie, shop)] = 0
+            self.movie_prices[(movie, shop)] = price
+        self.last_search = {}
 
     def search(self, movie: int) -> List[int]:
-        
+        if movie in self.last_search:
+            return self.last_search[movie]
+        res = []
+        heap =  self.cheapest_shop[movie].copy()
+        while heap:
+        # for price, shop in self.cheapest_shop[movie]:
+            price, shop = heapq.heappop(heap)
+            if self.movie_status[(movie, shop)] == 0:
+                res.append(shop)
+                if len(res) == 5:
+                    break
+        self.last_search[movie] = res
+        return res
 
     def rent(self, shop: int, movie: int) -> None:
+        if movie in self.last_search:
+            del self.last_search[movie]
+        self.movie_status[(movie, shop)] = 1
+        price = self.movie_prices[(movie, shop)]
+        if (price, shop, movie) not in self.report_list_set:
+            self.report_list_set.add( (price, shop, movie) )
+            heapq.heappush(self.report_list, (price, shop, movie))
         
-
     def drop(self, shop: int, movie: int) -> None:
-        
+        if movie in self.last_search:
+            del self.last_search[movie]
+        self.movie_status[(movie, shop)] = 0
 
     def report(self) -> List[List[int]]:
-        
+        res = []
+        heap =  self.report_list.copy()
+        while heap:
+            price, shop, movie = heapq.heappop(heap)
+            if self.movie_status[(movie, shop)] == 1:
+                res.append([shop, movie])
+                if len(res) == 5:
+                    break
+        return res
 
 
 # Your MovieRentingSystem object will be instantiated and called as such:
