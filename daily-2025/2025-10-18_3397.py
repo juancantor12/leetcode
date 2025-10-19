@@ -11,18 +11,13 @@ nums changes to [-1, 0, 1, 2, 3, 4] after performing operations on the first fou
 """
 class Solution:
     def maxDistinctElements(self, nums: List[int], k: int) -> int:
-        if not nums:
-            return 0
-        nums.sort()
-        count = 0
-        prev = -(1 << 30)
-        for a in nums:
-            low = a - k
-            high = a + k
-            x = prev + 1
-            if x < low:
-                x = low
-            if x <= high:
-                count += 1
-                prev = x
-        return count
+        nums.sort()                   # sort to handle in increasing order
+        curr = float('-inf')          # next available smallest number
+        ans = 0
+        for x in nums:
+            start, end = x - k, x + k
+            pick = max(start, curr)   # smallest number >= curr
+            if pick <= end:
+                ans += 1
+                curr = pick + 1       # move pointer forward
+        return ans
