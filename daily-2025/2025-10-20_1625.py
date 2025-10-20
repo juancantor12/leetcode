@@ -1,0 +1,37 @@
+"""
+You are given a string s of even length consisting of digits from 0 to 9, and two integers a and b.
+You can apply either of the following two operations any number of times and in any order on s:
+Add a to all odd indices of s (0-indexed). Digits post 9 are cycled back to 0. For example, if s = "3456" and a = 5, s becomes "3951".
+Rotate s to the right by b positions. For example, if s = "3456" and b = 1, s becomes "6345".
+Return the lexicographically smallest string you can obtain by applying the above operations any number of times on s.
+A string a is lexicographically smaller than a string b (of the same length) if in the first position where a and b differ, string a has a letter that appears earlier in the alphabet than the corresponding letter in b. 
+For example, "0158" is lexicographically smaller than "0190" because the first position they differ is at the third letter, and '5' comes before '9'.
+"""
+class Solution:
+    """
+    Brute force solution:
+    1. Using a BFS queue to explore every possible mutation (both operations)
+    2. Keep track of visited roations/aditions and keep track of the smallest so far
+    3. If any of the rotation is not on the visited set, add it and add it to the queue,
+    4. after every combination has been explores, return smallest.
+    5. This rotation trick seems neat, TODO: explore it.
+    """
+    def findLexSmallestString(self, s: str, a: int, b: int) -> str:
+        vis = set([s])
+        smallest = s
+        q = [s]
+        while q:
+            cur = q.pop(0)
+            if cur < smallest:  smallest = cur
+            chars = list(cur)
+            for i in range(1, len(chars), 2):
+                chars[i] = str((int(chars[i]) + a) % 10)
+            added = ''.join(chars)
+            if added not in vis:
+                vis.add(added)
+                q.append(added)
+            rotated = cur[-b:] + cur[:-b] # cHECK THIS ONE OUT
+            if rotated not in vis:
+                vis.add(rotated)
+                q.append(rotated)
+        return smallest
