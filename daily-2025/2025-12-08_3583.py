@@ -1,4 +1,5 @@
 """
+2025-12-08_3583
 A special triplet is defined as a triplet of indices (i, j, k) such that:
 0 <= i < j < k < n, where n = nums.length
 nums[i] == nums[j] * 2
@@ -12,8 +13,7 @@ class Solution:
         cnt = 0
         prev[nums[0]] += 1
         for i in range(1, len(nums)-1):
-            x = nums[i]
-            x2 = x * 2
-            cnt += prev[x2] * (freq[x2] - prev[x2] - (x==0))
-            prev[x] += 1
+            x2 = nums[i] * 2
+            cnt += prev[x2] * (freq[x2] - prev[x2] - (1 if x2 == 0 else 0))
+            prev[nums[i]] += 1
         return cnt % ((10**9)+7)
